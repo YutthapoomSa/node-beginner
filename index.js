@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const sendDataToPocketBase = require("./functions/send_data");
 
 const app = express();
 
@@ -9,6 +10,15 @@ const PORT = process.env.PORT;
 
 app.get("/", (req, res) => {
   res.status(200).json("Hello EIEI!");
+});
+
+app.post("/api/realtime", async (req, res) => {
+  try {
+    const result = await sendDataToPocketBase();
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 app.listen(PORT, () => {
